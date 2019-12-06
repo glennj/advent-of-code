@@ -71,8 +71,8 @@ Finally, some notes:
 - It is important to remember that the instruction pointer should increase
   by the number of values in the instruction after the instruction finishes.
   Because of the new instructions, this amount is no longer always 4.
-- Integers can be negative: 1101,100,-1,4,0 is a valid program (find 100 +
-  -1, store the result in position 4).
+- Integers can be negative: 1101,100,-1,4,0 is a valid program 
+  (find 100 + -1, store the result in position 4).
 
 The TEST diagnostic program will start by requesting from the user the ID of
 the system to test by running an input instruction - provide it 1, the ID

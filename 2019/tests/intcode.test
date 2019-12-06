@@ -57,7 +57,28 @@ test op-1.9 "evaluate addition 2" -body {
 # part 2
 
 test op-2.1 "save input" -body {
+    set intcode [IntCode new "3,0,99"]
+    $intcode evaluate 42
+} -returnCodes ok -result 42
+
+test op-2.2 "print input" -body {
     set intcode [IntCode new "3,0,4,0,99"]
     $intcode evaluate 42
 } -returnCodes ok -output "42\n" -result 42
+
+test op-3.1 "modes, first param is immediate" -body {
+    set intcode [IntCode new "1001,5,6,0,99,10,20"]
+    $intcode evaluate
+} -returnCodes ok -result 25
+
+test op-3.2 "modes, second param is immediate" -body {
+    set intcode [IntCode new "101,5,6,0,99,10,20"]
+    $intcode evaluate
+} -returnCodes ok -result 16
+
+test op-3.3 "modes, both params immediate" -body {
+    set intcode [IntCode new "1101,5,6,0,99,10,20"]
+    $intcode evaluate
+} -returnCodes ok -result 11
+
 cleanupTests
