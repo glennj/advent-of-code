@@ -1,0 +1,57 @@
+#!/usr/bin/env tclsh
+package require tcltest
+namespace import ::tcltest::*
+source ../lib/fuel-counter-upper.tcl
+
+# part 1
+
+test fuel-1.1 "with 12" -body {
+    set modules {12}
+    requiredFuel $modules
+} -returnCodes ok  -result 2
+
+test fuel-1.2 "with 14" -body {
+    set modules {14}
+    requiredFuel $modules
+} -returnCodes ok  -result 2
+
+test fuel-1.3 "with 12 and 14" -body {
+    set modules {12 14}
+    requiredFuel $modules
+} -returnCodes ok  -result 4
+
+test fuel-1.4 "with 1969" -body {
+    set modules {1969}
+    requiredFuel $modules
+} -returnCodes ok  -result 654
+
+test fuel-1.5 "with 100756" -body {
+    set modules {100756}
+    requiredFuel $modules
+} -returnCodes ok  -result 33583
+
+test fuel-1.6 "all modules" -body {
+    set modules {12 14 1969 100756}
+    requiredFuel $modules
+} -returnCodes ok  -result [expr {2 + 2 + 654 + 33583}]
+
+# part 2
+
+test fuel-2.1 "no negative fuel" -body {
+    lmap i {0 1 2 3 4 5 6 7 8 9 10} {fuelFor $i}
+} -returnCodes ok  -result {0 0 0 0 0 0 0 0 0 1 1}
+
+test fuel-2.2 "with 14 accounting for weight of fuel" -body {
+    requiredFuelAccountingForWeightOfFuel {14}
+} -returnCodes ok  -result 2
+
+test fuel-2.3 "with 1969 accounting for weight of fuel" -body {
+    requiredFuelAccountingForWeightOfFuel {1969}
+} -returnCodes ok  -result 966
+
+test fuel-2.4 "with 100756 accounting for weight of fuel" -body {
+    requiredFuelAccountingForWeightOfFuel {100756}
+} -returnCodes ok  -result 50346
+
+
+cleanupTests
