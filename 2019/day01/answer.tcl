@@ -1,6 +1,6 @@
 #!/usr/bin/env tclsh
 
-source ./lib/fuel-counter-upper.tcl
+source ../lib/fuel-counter-upper.tcl
 
 proc answer {} {
     set fh [open "./input.day01" r]

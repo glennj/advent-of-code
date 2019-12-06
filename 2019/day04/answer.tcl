@@ -1,6 +1,6 @@
 #!/usr/bin/env tclsh
 
-source ./lib/passwords.tcl
+source ../lib/passwords.tcl
 
 proc answer {} {
     set input 256310-732736
