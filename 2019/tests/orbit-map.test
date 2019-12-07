@@ -1,0 +1,70 @@
+#!/usr/bin/env tclsh
+
+package require tcltest
+namespace import ::tcltest::*
+source ../lib/orbit-map.tcl
+
+test om-1.1 "central node" -body {
+    set com [OrbitalNode new "COM"]
+    $com orbits
+} -returnCodes ok -result 0
+
+test om-1.2 "1 orbit" -body {
+    set com [OrbitalNode new "COM"]
+    set a [OrbitalNode new "A" $com]
+    $a orbits
+} -returnCodes ok -result 1
+
+test om-1.3 "2 orbits" -body {
+    set com [OrbitalNode new "COM"]
+    set a [OrbitalNode new "A" $com]
+    set b [OrbitalNode new "B" $a]
+    $b orbits
+} -returnCodes ok -result 2
+
+test om-2.1 "a tree" -body {
+    set map [OrbitMap new]
+    $map parse "COM)A\nA)B"
+    $map totalOrbits
+} -returnCodes ok -result 3
+
+
+test om-2.2 "sample" -body {
+    set input "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L"
+    set om [OrbitMap new]
+    $om parse $input
+    $om totalOrbits
+} -returnCodes ok -result 42
+
+test om-2.3 "an unordered tree" -body {
+    set map [OrbitMap new]
+    $map parse "A)B\nCOM)A"
+    $map totalOrbits
+} -returnCodes ok -result 3
+
+# part 2
+
+test om-3.1 "get node" -body { 
+    set input "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L\nK)YOU\nI)SAN"
+    set om [OrbitMap new]
+    $om parse $input
+    set node [$om getNode "YOU"]
+    [$node parent] name
+} -returnCodes ok -result "K"
+
+test om-3.2 "path" -body { 
+    set input "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L\nK)YOU\nI)SAN"
+    set om [OrbitMap new]
+    $om parse $input
+    set node [$om getNode "YOU"]
+    $node path
+} -returnCodes ok -result {COM B C D E J K}
+
+test om-3.3 "distance" -body {
+    set input "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L\nK)YOU\nI)SAN"
+    set om [OrbitMap new]
+    $om parse $input
+    $om numOrbitalTransfers YOU SAN
+} -returnCodes ok -result 4
+
+cleanupTests

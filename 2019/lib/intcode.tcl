@@ -56,11 +56,41 @@ oo::class create IntCode {
                     puts $value
                     incr ptr 2
                 }
+                5 { my _jump true }
+                6 { my _jump false }
+                7 { my _cmp < }
+                8 { my _cmp == }
             }
         }
 
         return [join $seq ,]
     }
+
+    method _jump {trueFalse} {
+        set opcode [lindex $seq $ptr]
+        set value [my _getOperand 1 $opcode]
+        set dest  [my _getOperand 2 $opcode]
+        set msg [list $ptr [list $opcode $value $dest]]
+        if {($trueFalse && $value != 0) || (!$trueFalse && $value == 0)} {
+            set ptr $dest
+        } else {
+            incr ptr 3
+        }
+        lappend msg $ptr
+        my _debug $msg
+    }
+
+    method _cmp {func} {
+        set opcode [lindex $seq $ptr]
+        set op1 [my _getOperand 1 $opcode]
+        set op2 [my _getOperand 2 $opcode]
+        set dest [lindex $seq $ptr+3]
+        set result [::tcl::mathop::$func $op1 $op2]
+        my _debug [list $ptr [list $opcode $op1 $op2 $dest] $result]
+        my setAt $dest $result
+        incr ptr 4
+    }
+
 
     # a binary math operation looks like
     #     a,b,c,d
@@ -81,7 +111,7 @@ oo::class create IntCode {
 
     method _getOperand {idx opcode} {
         set param [lindex $seq $ptr+$idx]
-        set divisor [expr {100 * 10**(2 - $idx)}]
+        set divisor [expr {100 * 10**($idx - 1)}]
         set mode [expr {($opcode / $divisor) % 10}]
         if {$mode == 0} {
             # position mode
