@@ -1,5 +1,7 @@
 #!/usr/bin/env tclsh
 
+package provide passwords 1.0
+
 namespace eval passwords {
     proc containsDouble {pw} {
         regexp {(\d)\1} $pw

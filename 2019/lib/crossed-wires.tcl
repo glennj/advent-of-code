@@ -1,5 +1,7 @@
 #!/usr/bin/env tclsh
 
+package provide crossed_wires 1.0
+
 namespace eval wires {
     proc manhattanDistance {wire1 wire2} {
         set path1 [path $wire1]

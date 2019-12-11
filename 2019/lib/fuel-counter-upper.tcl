@@ -1,5 +1,7 @@
 #!/usr/bin/env tclsh
 
+package provide fuel_counter_upper 1.0
+
 proc requiredFuel {modules} {
 	set fuelNeeded 0
 	foreach module $modules {

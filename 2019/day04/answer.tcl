@@ -1,6 +1,7 @@
 #!/usr/bin/env tclsh
 
-source ../lib/passwords.tcl
+lappend auto_path ../lib
+package require passwords
 
 proc answer {} {
     set input 256310-732736

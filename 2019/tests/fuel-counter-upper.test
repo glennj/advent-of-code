@@ -1,7 +1,8 @@
 #!/usr/bin/env tclsh
 package require tcltest
 namespace import ::tcltest::*
-source ../lib/fuel-counter-upper.tcl
+lappend auto_path ../lib
+package require fuel_counter_upper
 
 # part 1
 

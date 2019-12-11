@@ -1,6 +1,7 @@
 #!/usr/bin/env tclsh
 
-source ../lib/orbit-map.tcl
+lappend auto_path ../lib
+package require orbit_map
 
 set fh [open "./input.txt" r]
 set input [read -nonewline $fh]

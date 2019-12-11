@@ -1,7 +1,8 @@
 #!/usr/bin/env tclsh
 package require tcltest
 namespace import ::tcltest::*
-source ../lib/crossed-wires.tcl
+lappend auto_path ../lib
+package require crossed_wires
 
 # part 1
 test wire-1.1 "grid points of a wire" -body {
