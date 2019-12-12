@@ -1,9 +1,10 @@
 #!/usr/bin/env tclsh
 
-lappend auto_path ../lib
-package require orbit_map
+set scriptDir [file dirname [info script]]
+lappend auto_path [file join $scriptDir .. lib]
+package require orbitMap
 
-set fh [open "./input.txt" r]
+set fh [open "$scriptDir/input.txt" r]
 set input [read -nonewline $fh]
 close $fh
 

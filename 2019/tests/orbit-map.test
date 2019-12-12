@@ -3,7 +3,7 @@
 package require tcltest
 namespace import ::tcltest::*
 lappend auto_path ../lib
-package require orbit_map
+package require orbitMap
 
 test om-1.1 "central node" -body {
     set com [OrbitalNode new "COM"]

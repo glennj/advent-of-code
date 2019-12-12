@@ -2,7 +2,7 @@
 package require tcltest
 namespace import ::tcltest::*
 lappend auto_path ../lib
-package require crossed_wires
+package require crossedWires
 
 # part 1
 test wire-1.1 "grid points of a wire" -body {

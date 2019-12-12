@@ -2,7 +2,7 @@
 package require tcltest
 namespace import ::tcltest::*
 lappend auto_path ../lib
-package require space_image_format
+package require spaceImageFormat
 
 # part 1
 test img-1 "image layers" -body {

@@ -1,6 +1,6 @@
 #!/usr/bin/env tclsh
 
-package provide intcode 1.0
+package provide intCode 1.0
 
 oo::class create IntCode {
     variable program input debug ptr

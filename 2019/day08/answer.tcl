@@ -1,10 +1,10 @@
 #!/usr/bin/env tclsh
 
-lappend auto_path ../lib
-package require space_image_format
+set scriptDir [file dirname [info script]]
+lappend auto_path [file join $scriptDir .. lib]
+package require spaceImageFormat
 
-cd ../day08
-set fh [open "./input" r]
+set fh [open "$scriptDir/input" r]
 set input [read -nonewline $fh]
 close $fh
 
@@ -22,5 +22,5 @@ puts [expr {$ones * $twos}]
 # part 2
 
 foreach row [$image decode] {
-    puts [string map {0 " " 1 *} [join $row ""]]
+    puts [string map {0 " " 1 ,} [join $row ""]]
 }

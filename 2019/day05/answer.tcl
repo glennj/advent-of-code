@@ -1,9 +1,10 @@
 #!/usr/bin/env tclsh
 
-lappend auto_path ../lib
-package require intcode
+set scriptDir [file dirname [info script]]
+lappend auto_path [file join $scriptDir .. lib]
+package require intCode
 
-set fh [open "./input" r]
+set fh [open "$scriptDir/input" r]
 set program [read -nonewline $fh]
 close $fh
 

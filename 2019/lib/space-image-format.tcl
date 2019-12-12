@@ -1,6 +1,6 @@
 #!/usr/bin/env tclsh
 
-package provide space_image_format 1.0
+package provide spaceImageFormat 1.0
 
 oo::class create SpaceImageFormat {
     variable height width data layers

@@ -2,8 +2,7 @@
 
 package provide thrusters 1.0
 
-package require intcode
-package require Thread
+package require intCode
 
 oo::class create Thrusters {
     variable num

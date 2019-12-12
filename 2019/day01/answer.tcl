@@ -1,15 +1,16 @@
 #!/usr/bin/env tclsh
 
-lappend auto_path ../lib
-package require fuel_counter_upper
+set scriptDir [file dirname [info script]]
+lappend auto_path [file join $scriptDir .. lib]
+package require fuelCounter
 
 proc answer {} {
-    set fh [open "./input" r]
+    set fh [open "$::scriptDir/input" r]
     set modules [regexp -all -inline {\d+} [read $fh]]
     # part 1
-    puts [requiredFuel $modules]
+    puts [fuelCounter::requiredFuel $modules]
     # part 2
-    puts [requiredFuelAccountingForWeightOfFuel $modules]
+    puts [fuelCounter::requiredFuelAccountingForWeightOfFuel $modules]
 }
 
 answer

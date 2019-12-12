@@ -1,6 +1,6 @@
 #!/usr/bin/env tclsh
 
-package provide orbit_map 1.0
+package provide orbitMap 1.0
 
 oo::class create OrbitMap {
     variable root nodes

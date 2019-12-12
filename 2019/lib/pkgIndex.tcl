@@ -8,10 +8,12 @@
 # script is sourced, the variable $dir must contain the
 # full path name of this file's directory.
 
-package ifneeded crossed_wires 1.0 [list source [file join $dir crossed-wires.tcl]]
-package ifneeded fuel_counter_upper 1.0 [list source [file join $dir fuel-counter-upper.tcl]]
-package ifneeded intcode 1.0 [list source [file join $dir intcode.tcl]]
-package ifneeded orbit_map 1.0 [list source [file join $dir orbit-map.tcl]]
+package ifneeded asteroidMonitoring 1.0 [list source [file join $dir asteroid-monitoring.tcl]]
+package ifneeded crossedWires 1.0 [list source [file join $dir crossed-wires.tcl]]
+package ifneeded fuelCounter 1.0 [list source [file join $dir fuel-counter.tcl]]
+package ifneeded intCode 1.0 [list source [file join $dir intcode.tcl]]
+package ifneeded miscUtils 1.0 [list source [file join $dir misc-utils.tcl]]
+package ifneeded orbitMap 1.0 [list source [file join $dir orbit-map.tcl]]
 package ifneeded passwords 1.0 [list source [file join $dir passwords.tcl]]
-package ifneeded space_image_format 1.0 [list source [file join $dir space-image-format.tcl]]
+package ifneeded spaceImageFormat 1.0 [list source [file join $dir space-image-format.tcl]]
 package ifneeded thrusters 1.0 [list source [file join $dir thrusters.tcl]]

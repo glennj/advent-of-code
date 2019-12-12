@@ -2,7 +2,8 @@
 package require tcltest
 namespace import ::tcltest::*
 lappend auto_path ../lib
-package require fuel_counter_upper
+package require fuelCounter
+namespace import ::fuelCounter::*
 
 # part 1
 

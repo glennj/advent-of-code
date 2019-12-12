@@ -1,6 +1,7 @@
 #!/usr/bin/env tclsh
 
-lappend auto_path ../lib
+set scriptDir [file dirname [info script]]
+lappend auto_path [file join $scriptDir .. lib]
 package require passwords
 
 proc answer {} {
