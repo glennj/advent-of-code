@@ -1,0 +1,240 @@
+#!/usr/bin/env tclsh
+package require tcltest
+namespace import ::tcltest::*
+lappend auto_path ../lib
+package require moon
+
+test moon-1 "create" -body {
+    set m [Moon new Fred {x 0 y 0 z 0}]
+    $m toString
+} -returnCodes ok -result {Fred pos {x 0 y 0 z 0} vel {x 0 y 0 z 0}}
+
+test moon-2 "apply delta" -body {
+    set m [Moon new Fred {x 1 y 1 z 1}]
+    $m applyDelta {x 1 y 0 z -1}
+    $m toString
+} -returnCodes ok -result {Fred pos {x 2 y 1 z 0} vel {x 1 y 0 z -1}}
+
+test moon-3.1 "relative position" -body {
+    set m1 [Moon new Alice {x 0 y 1 z 2}]
+    set m2 [Moon new Bob   {x 1 y 1 z 1}]
+    $m1 deltaFor $m2
+} -returnCodes ok -result {x 1 y 0 z -1}
+
+test moon-3.2 "relative position" -body {
+    set m1 [Moon new Alice {x 0 y 1 z 2}]
+    set m2 [Moon new Bob   {x 1 y 1 z 1}]
+    $m2 deltaFor $m1
+} -returnCodes ok -result {x -1 y 0 z 1}
+
+test moon-4.1 "example step 0" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x -1 y 0 z 2} vel {x 0 y 0 z 0}
+Europa pos {x 2 y -10 z -7} vel {x 0 y 0 z 0}
+Ganymede pos {x 4 y -8 z 8} vel {x 0 y 0 z 0}
+Callisto pos {x 3 y 5 z -1} vel {x 0 y 0 z 0}
+}]
+
+test moon-4.2 "example step 1" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x 2 y -1 z 1} vel {x 3 y -1 z -1}
+Europa pos {x 3 y -7 z -4} vel {x 1 y 3 z 3}
+Ganymede pos {x 1 y -7 z 5} vel {x -3 y 1 z -3}
+Callisto pos {x 2 y 2 z 0} vel {x -1 y -3 z 1}
+}]
+
+test moon-4.3 "example step 2" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 2
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x 5 y -3 z -1} vel {x 3 y -2 z -2}
+Europa pos {x 1 y -2 z 2} vel {x -2 y 5 z 6}
+Ganymede pos {x 1 y -4 z -1} vel {x 0 y 3 z -6}
+Callisto pos {x 1 y -4 z 2} vel {x -1 y -6 z 2}
+}]
+
+test moon-4.4 "example step 3" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 3
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x 5 y -6 z -1} vel {x 0 y -3 z 0}
+Europa pos {x 0 y 0 z 6} vel {x -1 y 2 z 4}
+Ganymede pos {x 2 y 1 z -5} vel {x 1 y 5 z -4}
+Callisto pos {x 1 y -8 z 2} vel {x 0 y -4 z 0}
+}]
+
+test moon-4.5 "example step 4" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 4
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x 2 y -8 z 0} vel {x -3 y -2 z 1}
+Europa pos {x 2 y 1 z 7} vel {x 2 y 1 z 1}
+Ganymede pos {x 2 y 3 z -6} vel {x 0 y 2 z -1}
+Callisto pos {x 2 y -9 z 1} vel {x 1 y -1 z -1}
+}]
+
+test moon-4.6 "example step 5" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 5
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x -1 y -9 z 2} vel {x -3 y -1 z 2}
+Europa pos {x 4 y 1 z 5} vel {x 2 y 0 z -2}
+Ganymede pos {x 2 y 2 z -4} vel {x 0 y -1 z 2}
+Callisto pos {x 3 y -7 z -1} vel {x 1 y 2 z -2}
+}]
+
+test moon-4.7 "example step 6" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 6
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x -1 y -7 z 3} vel {x 0 y 2 z 1}
+Europa pos {x 3 y 0 z 0} vel {x -1 y -1 z -5}
+Ganymede pos {x 3 y -2 z 1} vel {x 1 y -4 z 5}
+Callisto pos {x 3 y -4 z -2} vel {x 0 y 3 z -1}
+}]
+
+test moon-4.8 "example step 7" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 7
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x 2 y -2 z 1} vel {x 3 y 5 z -2}
+Europa pos {x 1 y -4 z -4} vel {x -2 y -4 z -4}
+Ganymede pos {x 3 y -7 z 5} vel {x 0 y -5 z 4}
+Callisto pos {x 2 y 0 z 0} vel {x -1 y 4 z 2}
+}]
+
+test moon-4.9 "example step 8" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 8
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x 5 y 2 z -2} vel {x 3 y 4 z -3}
+Europa pos {x 2 y -7 z -5} vel {x 1 y -3 z -1}
+Ganymede pos {x 0 y -9 z 6} vel {x -3 y -2 z 1}
+Callisto pos {x 1 y 1 z 3} vel {x -1 y 1 z 3}
+}]
+
+test moon-4.10 "example step 9" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 9
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x 5 y 3 z -4} vel {x 0 y 1 z -2}
+Europa pos {x 2 y -9 z -3} vel {x 0 y -2 z 2}
+Ganymede pos {x 0 y -8 z 4} vel {x 0 y 1 z -2}
+Callisto pos {x 1 y 1 z 5} vel {x 0 y 0 z 2}
+}]
+
+test moon-4.11 "example step 10" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 10
+    $moons toString
+} -returnCodes ok -result [string trim {
+Io pos {x 2 y 1 z -3} vel {x -3 y -2 z 1}
+Europa pos {x 1 y -8 z 0} vel {x -1 y 1 z 3}
+Ganymede pos {x 3 y -6 z 1} vel {x 3 y 2 z -3}
+Callisto pos {x 2 y 0 z 4} vel {x 1 y -1 z -1}
+}]
+
+test moon-5 "energy" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons step 10
+    set energies [lmap moon [$moons moons] {$moon energy}]
+    list $energies [$moons totalEnergy]
+} -returnCodes ok -result {{36 45 80 18} 179}
+
+test moon-6 "second example" -body {
+    set moons [Moons new {
+        {x -8 y -10 z 0}
+        {x 5 y 5 z 10}
+        {x 2 y -7 z 3}
+        {x 9 y -8 z -3}
+    }]
+    $moons step 100
+    $moons totalEnergy
+} -returnCodes ok -result 1940
+
+
+test moon-7 "steps until repeated state" -body {
+    set moons [Moons new {
+        {x -1 y 0 z 2}
+        {x 2 y -10 z -7}
+        {x 4 y -8 z 8}
+        {x 3 y 5 z -1}
+    }]
+    $moons stepsUntilRepeatedState
+} -returnCodes ok -result 2772
+
+
+cleanupTests

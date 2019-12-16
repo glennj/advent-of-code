@@ -13,6 +13,7 @@ package ifneeded crossedWires 1.0 [list source [file join $dir crossed-wires.tcl
 package ifneeded fuelCounter 1.0 [list source [file join $dir fuel-counter.tcl]]
 package ifneeded intCode 1.0 [list source [file join $dir intcode.tcl]]
 package ifneeded miscUtils 1.0 [list source [file join $dir misc-utils.tcl]]
+package ifneeded moon 1.0 [list source [file join $dir moon.tcl]]
 package ifneeded orbitMap 1.0 [list source [file join $dir orbit-map.tcl]]
 package ifneeded passwords 1.0 [list source [file join $dir passwords.tcl]]
 package ifneeded spaceImageFormat 1.0 [list source [file join $dir space-image-format.tcl]]

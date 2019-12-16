@@ -51,7 +51,7 @@ test op-1.8 "evaluate multiple operations" -body {
     set intcode [IntCode new "1,9,10,3,2,3,11,0,99,30,40,50"]
     $intcode at 1 9
     $intcode at 2 10
-    $intcode evaluate
+    $intcode execute
     $intcode at 0
 } -returnCodes ok -result 3500
 
@@ -64,7 +64,6 @@ test op-1.9 "evaluate addition 2" -body {
 } -returnCodes ok -result [expr {99 + 99}]
 
 # day 5, part 1
-
 test op-2.1 "save input" -body {
     set intcode [IntCode new "3,0,99"]
     $intcode evaluate 42
@@ -164,12 +163,12 @@ test op-4.8 "eq" -body {
     $intcode at 0
 } -returnCodes ok -result 0
 
-# sample not working ???
-#test op-5.1 "output 999 if the input is below 8" -body {
-#    set prog "3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99"
-#    set intcode [IntCode new $prog]
-#    $intcode evaluate 7
-#} -returnCodes ok -result 999
+
+test op-5.1 "output 999 if the input is below 8" -body {
+    set prog "3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99"
+    set intcode [IntCode new $prog]
+    $intcode evaluate 7
+} -returnCodes ok -result 999
 
 test op-5.2 "output 1000 if the input is 8" -body {
     set prog "3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99"
@@ -212,5 +211,7 @@ test op-6.4 "should output the number in the middle" -body {
 } -returnCodes ok -result 1125899906842624
 
 
+if 0 {
+}
 
 cleanupTests

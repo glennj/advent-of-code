@@ -27,3 +27,8 @@ proc ::foreachWithIndex {varNames list script} {
         incr idx
     }
 }
+
+proc ::commify {num} {
+    while {[regsub {(\d+)(\d{3})} $num {\1,\2} num]} {}
+    return $num
+}

@@ -3,9 +3,10 @@
 package provide intCode 1.0
 
 oo::class create IntCode {
-    variable program input debug ptr
+    variable program debug ptr
+    #variable input
+    #variable output
     variable opcode
-    variable output
     variable relativeBase
 
     constructor {Program {Debug false}} {
@@ -56,19 +57,30 @@ oo::class create IntCode {
     }
 
     method evaluate {{inputs {}}} {
-        set input $inputs
+        coroutine producer apply {{inputs} {
+            yield
+            foreach input $inputs {yield $input}
+        }} $inputs
+        coroutine executor [self] execute producer
         set output [list]
-        my execute
+        while true {
+            set value [executor]
+            if {[info command executor] eq ""} then break
+            #puts "got output value >$value<"
+            lappend output $value
+        }
         return $output
     }
 
-    method _getInput {} {
-        # shift the next value from the inputs
-        set input [lassign $input value]
-        return $value
-    }
+#    method _getInput {} {
+#        # shift the next value from the inputs
+#        set input [lassign $input value]
+#        return $value
+#        return [yield]
+#    }
 
-    method execute {} {
+    method execute {{producer ""}} {
+        if {$producer ne ""} {yield [info coroutine]}
         set ptr 0
 
         while true {
@@ -82,25 +94,36 @@ oo::class create IntCode {
                 }
                 1 { my _binaryMathOperation + }
                 2 { my _binaryMathOperation * }
-                3 {
-                    my at [my _getPosition 1] [my _getInput]
-                    incr ptr 2
-                }
-                4 {
-                    lappend output [my at [my _getPosition 1]]
-                    incr ptr 2
-                }
+                3 { my _getInput $producer }
+                4 { my _output }
                 5 { my _jump true }
                 6 { my _jump false }
                 7 { my _cmp < }
                 8 { my _cmp == }
-                9 {
-                    incr relativeBase [my _getOperand 1]
-                    incr ptr 2
-                }
+                9 { my _setRelativeBase }
                 default { error "unknown opcode: $opcode" }
             }
         }
+    }
+
+    method _setRelativeBase {} {
+        incr relativeBase [my _getOperand 1]
+        incr ptr 2
+    }
+
+    method _getInput {producer} {
+        set value [$producer]
+        #puts [list [info level 0] $producer $value]
+        my at [my _getPosition 1] $value
+        incr ptr 2
+    }
+
+    method _output {} {
+        #lappend output [my at [my _getPosition 1]]
+        set value [my at [my _getPosition 1]]
+        #puts "about to yield >$value<"
+        yield $value
+        incr ptr 2
     }
 
     method _jump {trueFalse} {
